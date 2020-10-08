@@ -5,6 +5,8 @@
 //  Created by Adam Wienconek on 19/09/2020.
 //
 
+import Foundation
+
 /// Saved Album object containing reference to the full Album object.
 public class SPTSavedAlbum: Codable {
     /**

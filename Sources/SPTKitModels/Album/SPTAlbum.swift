@@ -5,6 +5,8 @@
 //  Created by Adam Wienconek on 19/09/2020.
 //
 
+import Foundation
+
 /// Full Album object.
 public class SPTAlbum: SPTSimplifiedAlbum {
     /**

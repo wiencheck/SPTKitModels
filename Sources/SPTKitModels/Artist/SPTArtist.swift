@@ -5,6 +5,8 @@
 //  Created by Adam Wienconek on 19/09/2020.
 //
 
+import Foundation
+
 /// Full Artist object.
 public class SPTArtist: SPTSimplifiedArtist {
     public let genres: [String]

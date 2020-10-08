@@ -5,6 +5,8 @@
 //  Created by Adam Wienconek on 20/09/2020.
 //
 
+import Foundation
+
 /// Private User object.
 public class SPTPrivateUser: SPTPublicUser {
     /**

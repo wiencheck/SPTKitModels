@@ -5,6 +5,7 @@
 //  Created by Adam Wienconek on 07/10/2020.
 //
 
+import Foundation
 
 protocol Plurable: Decodable {
     static var pluralKey: String { get }

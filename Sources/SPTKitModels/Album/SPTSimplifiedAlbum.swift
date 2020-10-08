@@ -5,6 +5,8 @@
 //  Created by Adam Wienconek on 19/09/2020.
 //
 
+import Foundation
+
 /// Simplified Album object.
 public class SPTSimplifiedAlbum: SPTBaseObject {
     

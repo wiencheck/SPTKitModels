@@ -5,6 +5,8 @@
 //  Created by Adam Wienconek on 08/10/2020.
 //
 
+import Foundation
+
 /// Simplified Playlist object.
 public class SPTSimplifiedPlaylist: SPTBaseObject {
     /**

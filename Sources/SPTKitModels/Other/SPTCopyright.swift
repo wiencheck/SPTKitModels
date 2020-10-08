@@ -7,6 +7,8 @@
 
 import Foundation
 
+import Foundation
+
 public class SPTCopyright: Codable {
     /**
      The copyright text for this object.
