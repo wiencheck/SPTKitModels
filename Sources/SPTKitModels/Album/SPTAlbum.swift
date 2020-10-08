@@ -82,7 +82,7 @@ public class SPTAlbum: SPTSimplifiedAlbum {
 }
 
 extension SPTAlbum: Plurable {
-    static var pluralKey: String {
+    public static var pluralKey: String {
         return "albums"
     }
 }

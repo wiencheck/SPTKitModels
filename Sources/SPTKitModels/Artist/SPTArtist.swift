@@ -38,7 +38,7 @@ public class SPTArtist: SPTSimplifiedArtist {
 }
 
 extension SPTArtist: Plurable {
-    static var pluralKey: String {
+    public static var pluralKey: String {
         return "artists"
     }
 }
