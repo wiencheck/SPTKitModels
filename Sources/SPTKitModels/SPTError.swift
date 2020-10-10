@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct SPTError: Codable {
+public class SPTError: Codable {
     /**
      The HTTP status code that is also returned in the response header. For further information, see https://developer.spotify.com/documentation/web-api/#response-status-codes.
      */
@@ -17,6 +17,36 @@ public struct SPTError: Codable {
      A short description of the cause of the error.
      */
     public let message: String
+    
+    // MARK: Codable stuff
+    private enum CodingKeys: String, CodingKey {
+        case error
+    }
+    
+    private enum NestedCodingKeys: String, CodingKey {
+        case status, message
+    }
+    
+    init(status: Int, message: String) {
+        self.status = status
+        self.message = message
+    }
+
+    public required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        let subcontainer = try container.nestedContainer(keyedBy: NestedCodingKeys.self, forKey: .error)
+        status = try subcontainer.decode(Int.self, forKey: .status)
+        message = try subcontainer.decode(String.self, forKey: .message)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        var subcontainer = container.nestedContainer(keyedBy: NestedCodingKeys.self, forKey: .error)
+        try subcontainer.encode(status, forKey: .status)
+        try subcontainer.encode(status, forKey: .status)
+    }
 }
 
 extension SPTError: LocalizedError {
@@ -25,13 +55,10 @@ extension SPTError: LocalizedError {
     }
 }
 
-extension SPTError {
+public extension SPTError {
     static let emptyAuthorizationTokenError = SPTError(status: -1, message: "Authorization token was empty.")
     static let noDataReceivedError = SPTError(status: -1, message: "No data received.")
     static let decodingError = SPTError(status: -1, message: "Could not decode data.")
     static let badRequest = SPTError(status: -1, message: "Could not create valid request.")
-}
-
-struct SPTErrorResponse: Codable {
-    let error: SPTError
+    static let invalidCodingKey = SPTError(status: -1, message: "Couldn't create valid CodingKey")
 }

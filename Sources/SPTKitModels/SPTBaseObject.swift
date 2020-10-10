@@ -7,11 +7,11 @@
 
 import Foundation
 
-public class SPTBaseObject: Codable {
+public class SPTBaseObject: Codable, CustomStringConvertible {
     /**
      The object type.
      */
-    public let type: String
+    public let type: SPTObjectType
     
     /**
      The Spotify URI for the object.
@@ -38,5 +38,11 @@ public class SPTBaseObject: Codable {
         case type, uri, id
         case url = "href"
         case externalUrls = "external_urls"
+    }
+    
+    public var description: String {
+        return """
+            \(type), id: \(id)
+        """
     }
 }

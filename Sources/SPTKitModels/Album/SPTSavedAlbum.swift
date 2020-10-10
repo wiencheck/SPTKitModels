@@ -25,3 +25,12 @@ public class SPTSavedAlbum: Codable {
         case album
     }
 }
+
+extension SPTSavedAlbum: CustomStringConvertible {
+    public var description: String {
+        return """
+            Added at: \(addedDate)
+            \(album)
+        """
+    }
+}

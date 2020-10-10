@@ -28,4 +28,22 @@ public class SPTPagingObject<T: Codable>: Codable {
     public let previous: URL?
     
     public let total: Int
+    
+    public var canMakeNextRequest: Bool {
+        return next != nil
+    }
+    
+    public var canMakePreviousRequest: Bool {
+        return previous != nil
+    }
+}
+
+extension SPTPagingObject: CustomStringConvertible {
+    public var description: String {
+        return """
+            Offset: \(offset), total: \(total)
+            Previous: \(previous?.absoluteString ?? "nil"), Next: \(next?.absoluteString ?? "nil")
+            \(items)
+        """
+    }
 }

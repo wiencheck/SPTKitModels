@@ -58,14 +58,11 @@ public class SPTAlbum: SPTSimplifiedAlbum {
         label = try container.decode(String.self, forKey: .label)
         popularity = try container.decode(Int.self, forKey: .popularity)
         releaseDatePrecision = try container.decode(SPTDatePrecision.self, forKey: .releaseDatePrecision)
-        // Custom decoding strategy for objects returned from API or encoded by JSONEncoder.
-        if let date = try container.decodeIfPresent(Date.self, forKey: .releaseDate) {
-            releaseDate = date
-        } else {
-            let dateString = try container.decode(String.self, forKey: .releaseDate)
-            releaseDate = SPTDateFormatter.shared.date(from: dateString, precision: releaseDatePrecision)
-        }
+
+        let dateString = try container.decode(String.self, forKey: .releaseDate)
+        releaseDate = SPTDateFormatter.shared.date(from: dateString, precision: releaseDatePrecision)
         tracks = try container.decode(SPTPagingObject<SPTSimplifiedTrack>.self, forKey: .tracks)
+        
         try super.init(from: decoder)
     }
 
@@ -78,11 +75,5 @@ public class SPTAlbum: SPTSimplifiedAlbum {
         try container.encode(releaseDate, forKey: .releaseDate)
         try container.encode(tracks, forKey: .tracks)
         try super.encode(to: encoder)
-    }
-}
-
-extension SPTAlbum: Plurable {
-    public static var pluralKey: String {
-        return "albums"
     }
 }

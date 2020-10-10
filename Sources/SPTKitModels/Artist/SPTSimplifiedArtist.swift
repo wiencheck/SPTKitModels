@@ -14,6 +14,12 @@ public class SPTSimplifiedArtist: SPTBaseObject {
      */
     public let name: String
     
+    public override var description: String {
+        return """
+           Artist: \"\(name)\", uri: \(uri)
+        """
+    }
+    
     // MARK: Codable stuff
     private enum CodingKeys: String, CodingKey {
         case name
@@ -32,8 +38,8 @@ public class SPTSimplifiedArtist: SPTBaseObject {
     }
 }
 
-//extension SPTSimplifiedArtist: Plurable {
-//    static var pluralKey: String {
-//        return "artists"
-//    }
-//}
+extension SPTSimplifiedArtist: Nestable {
+    public static var pluralKey: String {
+        return "artists"
+    }
+}

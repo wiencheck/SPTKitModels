@@ -25,3 +25,12 @@ public class SPTSavedTrack: Codable {
         case addedDate = "added_at"
     }
 }
+
+extension SPTSavedTrack: CustomStringConvertible {
+    public var description: String {
+        return """
+            Added at: \(addedDate)
+            \(track)
+        """
+    }
+}

@@ -17,12 +17,12 @@ public class SPTPublicUser: SPTBaseObject {
     /**
      Information about the followers of this user.
      */
-    public let followers: SPTFollowers
+    public let followers: SPTFollowers?
     
     /**
      The user’s profile image.
      */
-    public let images: [SPTImage]
+    public let images: [SPTImage]?
         
     // MARK: Codable stuff
     private enum CodingKeys: String, CodingKey {
@@ -33,16 +33,16 @@ public class SPTPublicUser: SPTBaseObject {
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         displayName = try container.decodeIfPresent(String.self, forKey: .displayName)
-        followers = try container.decode(SPTFollowers.self, forKey: .followers)
-        images = try container.decode([SPTImage].self, forKey: .images)
+        followers = try container.decodeIfPresent(SPTFollowers.self, forKey: .followers)
+        images = try container.decodeIfPresent([SPTImage].self, forKey: .images)
         try super.init(from: decoder)
     }
 
     public override func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encodeIfPresent(displayName, forKey: .displayName)
-        try container.encode(followers, forKey: .followers)
-        try container.encode(images, forKey: .images)
+        try container.encodeIfPresent(followers, forKey: .followers)
+        try container.encodeIfPresent(images, forKey: .images)
         try super.encode(to: encoder)
     }
 }

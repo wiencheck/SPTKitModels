@@ -1,5 +1,5 @@
 //
-//  PlurableRoot.swift
+//  Nested.swift
 //  
 //
 //  Created by Adam Wienconek on 07/10/2020.
@@ -7,12 +7,12 @@
 
 import Foundation
 
-public protocol Plurable: Decodable {
+public protocol Nestable: Decodable {
     static var pluralKey: String { get }
 }
 
-public class PlurableRoot<T>: Decodable where T: Plurable {
-    let items: [T]
+public class Nested<T>: Decodable where T: Nestable {
+    public let items: [T]
 
     private struct CodingKeys: CodingKey {
         var stringValue: String

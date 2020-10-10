@@ -18,11 +18,5 @@ public class SPTFollowers: Codable {
     /**
      The total number of followers.
      */
-    public let count: Int
-    
-    // MARK: Codable stuff
-    private enum CodingKeys: String, CodingKey {
-        case url = "href"
-        case count = "total"
-    }
+    public let total: Int
 }

@@ -50,13 +50,23 @@ public class SPTSimplifiedPlaylist: SPTBaseObject {
      */
     public let total: Int
     
+    public override var description: String {
+        return """
+           Playlist: \"\(name)\", total: \(total), uri: \(uri)
+        """
+    }
+    
     // MARK: Codable stuff
     private enum CodingKeys: String, CodingKey {
         case images, name, owner, tracks
-        case isCollaborative = "is_collaborative"
+        case isCollaborative = "collaborative"
         case playlistDescription = "description"
         case snapshotId = "snapshot_id"
         case isPublic = "public"
+    }
+    
+    private enum TracksCodingKeys: String, CodingKey {
+        case total
     }
 
     required init(from decoder: Decoder) throws {
@@ -69,13 +79,9 @@ public class SPTSimplifiedPlaylist: SPTBaseObject {
         playlistDescription = try container.decodeIfPresent(String.self, forKey: .playlistDescription)
         snapshotId = try container.decode(String.self, forKey: .snapshotId)
         isPublic = try container.decodeIfPresent(Bool.self, forKey: .isPublic)
-//        if let dict = try container.decodeIfPresent([String: Any].self, forKey: .tracks),
-//               let value = dict["total"] as? Int {
-//            total = value
-//        } else {
-//            total = 0
-//        }
-        total = 0
+        
+        let subcontainer = try container.nestedContainer(keyedBy: TracksCodingKeys.self, forKey: .tracks)
+        total = try subcontainer.decode(Int.self, forKey: .total)
         
         try super.init(from: decoder)
     }
@@ -92,5 +98,11 @@ public class SPTSimplifiedPlaylist: SPTBaseObject {
         try container.encode(isPublic, forKey: .isPublic)
         
         try super.encode(to: encoder)
+    }
+}
+
+extension SPTSimplifiedPlaylist: Nestable {
+    public static var pluralKey: String {
+        return "playlists"
     }
 }

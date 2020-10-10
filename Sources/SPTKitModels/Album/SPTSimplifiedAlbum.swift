@@ -40,6 +40,12 @@ public class SPTSimplifiedAlbum: SPTBaseObject {
      */
     public let images: [SPTImage]
     
+    public override var description: String {
+        return """
+           Album: \"\(name)\", artists: \(artists), uri: \(uri)
+        """
+    }
+    
     // MARK: Codable stuff
     private enum CodingKeys: String, CodingKey {
         case artists, images, name
@@ -53,7 +59,7 @@ public class SPTSimplifiedAlbum: SPTBaseObject {
         albumGroup = try container.decodeIfPresent(AlbumGroup.self, forKey: .albumGroup)
         albumType = try container.decode(AlbumType.self, forKey: .albumType)
         artists = try container.decode([SPTSimplifiedArtist].self, forKey: .artists)
-        availableMarkets = try container.decode([String].self, forKey: .availableMarkets)
+        availableMarkets = try container.decodeIfPresent([String].self, forKey: .availableMarkets) ?? []
         images = try container.decode([SPTImage].self, forKey: .images)
         name = try container.decode(String.self, forKey: .name)
         try super.init(from: decoder)
@@ -69,7 +75,12 @@ public class SPTSimplifiedAlbum: SPTBaseObject {
         try container.encode(name, forKey: .name)
         try super.encode(to: encoder)
     }
-    
+}
+
+extension SPTSimplifiedAlbum: Nestable {
+    public static var pluralKey: String {
+        return "albums"
+    }
 }
 
 public extension SPTSimplifiedAlbum {
