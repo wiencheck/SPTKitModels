@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class SPTBaseObject: Codable, CustomStringConvertible {
+public class SPTBaseObject: Codable, Hashable, CustomStringConvertible {
     /**
      The object type.
      */
@@ -40,9 +40,20 @@ public class SPTBaseObject: Codable, CustomStringConvertible {
         case externalUrls = "external_urls"
     }
     
+    // MARK: `CustomStringConvertible` conformance
     public var description: String {
         return """
             \(type), id: \(id)
         """
+    }
+    
+    // MARK: `Equatable` conformance
+    public static func == (lhs: SPTBaseObject, rhs: SPTBaseObject) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    // MARK: `Hashable` conformance
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(uri)
     }
 }

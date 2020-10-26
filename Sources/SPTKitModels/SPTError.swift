@@ -56,9 +56,9 @@ extension SPTError: LocalizedError {
 }
 
 public extension SPTError {
-    static let emptyAuthorizationTokenError = SPTError(status: -1, message: "Authorization token was empty.")
-    static let noDataReceivedError = SPTError(status: -1, message: "No data received.")
-    static let decodingError = SPTError(status: -1, message: "Could not decode data.")
-    static let badRequest = SPTError(status: -1, message: "Could not create valid request.")
-    static let invalidCodingKey = SPTError(status: -1, message: "Couldn't create valid CodingKey")
+    static let emptyAuthorizationTokenError = SPTError(status: 50, message: "Authorization token was empty.")
+    static let noDataReceivedError = SPTError(status: 51, message: "No data received.")
+    static let decodingError = SPTError(status: 52, message: "Could not decode data.")
+    static let badRequest = SPTError(status: 53, message: "Could not create valid request.")
+    static let invalidCodingKey = SPTError(status: 54, message: "Couldn't create valid CodingKey")
 }

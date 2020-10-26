@@ -23,6 +23,10 @@ public class SPTPublicUser: SPTBaseObject {
      The user’s profile image.
      */
     public let images: [SPTImage]?
+    
+    public override var description: String {
+        return "User, name: \(displayName ?? "Unknown"), id: \(id)"
+    }
         
     // MARK: Codable stuff
     private enum CodingKeys: String, CodingKey {
