@@ -30,6 +30,9 @@ public class Nested<T>: Decodable where T: Nestable {
         guard let codingKey = CodingKeys(stringValue: T.pluralKey) else {
             throw SPTError(status: -1, message: "Couldn't create valid CodingKey")
         }
-        items = try container.decode([T].self, forKey: codingKey)
+        let throwables = try container.decode([Throwable<T>].self, forKey: codingKey)
+        items = throwables.compactMap {
+            try? $0.result.get()
+        }
     }
 }

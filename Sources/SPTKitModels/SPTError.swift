@@ -61,4 +61,6 @@ public extension SPTError {
     static let decodingError = SPTError(status: 52, message: "Could not decode data.")
     static let badRequest = SPTError(status: 53, message: "Could not create valid request.")
     static let invalidCodingKey = SPTError(status: 54, message: "Couldn't create valid CodingKey")
+    static let exceededRequestedIdCount = SPTError(status: 55, message: "Maximum number of requested ids was exceeded.")
+    static let albumGroupsEmpty = SPTError(status: 56, message: "Album groups cannot be empty.")
 }

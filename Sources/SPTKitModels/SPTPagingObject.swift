@@ -36,6 +36,36 @@ public class SPTPagingObject<T: Codable>: Codable {
     public var canMakePreviousRequest: Bool {
         return previous != nil
     }
+    
+    // MARK: Codable stuff
+    private enum CodingKeys: String, CodingKey {
+        case items, limit, next, offset, previous, total
+    }
+
+    required public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        let throwables = try container.decode([Throwable<T>].self, forKey: .items)
+        items = throwables.compactMap {
+            try? $0.result.get()
+        }
+        limit = try container.decode(Int.self, forKey: .limit)
+        next = try container.decodeIfPresent(URL.self, forKey: .next)
+        offset = try container.decode(Int.self, forKey: .offset)
+        previous = try container.decodeIfPresent(URL.self, forKey: .previous)
+        total = try container.decode(Int.self, forKey: .total)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encode(items, forKey: .items)
+        try container.encode(limit, forKey: .limit)
+        try container.encode(next, forKey: .next)
+        try container.encode(offset, forKey: .offset)
+        try container.encode(previous, forKey: .previous)
+        try container.encode(total, forKey: .total)
+    }
 }
 
 extension SPTPagingObject: CustomStringConvertible {

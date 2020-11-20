@@ -17,7 +17,7 @@ public class SPTSimplifiedPlaylist: SPTBaseObject {
     /**
      The playlist description. Only returned for modified, verified playlists, otherwise null .
      */
-    public let playlistDescription: String?
+    public let descriptionText: String?
     
     /**
      Images for the playlist. The array may be empty or contain up to three images. The images are returned by size in descending order. See Working with Playlists.
@@ -60,7 +60,7 @@ public class SPTSimplifiedPlaylist: SPTBaseObject {
     private enum CodingKeys: String, CodingKey {
         case images, name, owner, tracks
         case isCollaborative = "collaborative"
-        case playlistDescription = "description"
+        case descriptionText = "description"
         case snapshotId = "snapshot_id"
         case isPublic = "public"
     }
@@ -76,7 +76,7 @@ public class SPTSimplifiedPlaylist: SPTBaseObject {
         name = try container.decode(String.self, forKey: .name)
         owner = try container.decode(SPTPublicUser.self, forKey: .owner)
         isCollaborative = try container.decode(Bool.self, forKey: .isCollaborative)
-        playlistDescription = try container.decodeIfPresent(String.self, forKey: .playlistDescription)
+        descriptionText = try container.decodeIfPresent(String.self, forKey: .descriptionText)
         snapshotId = try container.decode(String.self, forKey: .snapshotId)
         isPublic = try container.decodeIfPresent(Bool.self, forKey: .isPublic)
         
@@ -93,7 +93,7 @@ public class SPTSimplifiedPlaylist: SPTBaseObject {
         try container.encode(name, forKey: .name)
         try container.encode(owner, forKey: .owner)
         try container.encode(isCollaborative, forKey: .isCollaborative)
-        try container.encode(playlistDescription, forKey: .playlistDescription)
+        try container.encode(descriptionText, forKey: .descriptionText)
         try container.encode(snapshotId, forKey: .snapshotId)
         try container.encode(isPublic, forKey: .isPublic)
         

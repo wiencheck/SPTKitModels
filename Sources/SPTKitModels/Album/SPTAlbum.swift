@@ -30,16 +30,6 @@ public class SPTAlbum: SPTSimplifiedAlbum {
     public let popularity: Int
     
     /**
-     The precision with which release_date value is known: "year" , "month" , or "day".
-     */
-    public let releaseDatePrecision: SPTDatePrecision
-    
-    /**
-     The date the album was first released.
-     */
-    public let releaseDate: Date
-    
-    /**
      The tracks of the album.
      */
     public let tracks: SPTPagingObject<SPTSimplifiedTrack>
@@ -47,8 +37,6 @@ public class SPTAlbum: SPTSimplifiedAlbum {
     // MARK: Codable stuff
     private enum CodingKeys: String, CodingKey {
         case copyrights, genres, label, popularity, tracks
-        case releaseDatePrecision = "release_date_precision"
-        case releaseDate = "release_date"
     }
     
     public required init(from decoder: Decoder) throws {
@@ -57,13 +45,13 @@ public class SPTAlbum: SPTSimplifiedAlbum {
         genres = try container.decode([String].self, forKey: .genres)
         label = try container.decode(String.self, forKey: .label)
         popularity = try container.decode(Int.self, forKey: .popularity)
-        releaseDatePrecision = try container.decode(SPTDatePrecision.self, forKey: .releaseDatePrecision)
-
-        let dateString = try container.decode(String.self, forKey: .releaseDate)
-        releaseDate = SPTDateFormatter.shared.date(from: dateString, precision: releaseDatePrecision)
         tracks = try container.decode(SPTPagingObject<SPTSimplifiedTrack>.self, forKey: .tracks)
         
         try super.init(from: decoder)
+    }
+    
+    public required init() {
+        fatalError("SPTKit objects should not be created directly.")
     }
 
     public override func encode(to encoder: Encoder) throws {
@@ -72,8 +60,8 @@ public class SPTAlbum: SPTSimplifiedAlbum {
         try container.encode(genres, forKey: .genres)
         try container.encode(label, forKey: .label)
         try container.encode(popularity, forKey: .popularity)
-        try container.encode(releaseDate, forKey: .releaseDate)
         try container.encode(tracks, forKey: .tracks)
+        
         try super.encode(to: encoder)
     }
 }

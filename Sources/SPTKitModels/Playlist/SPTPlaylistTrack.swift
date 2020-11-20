@@ -28,4 +28,20 @@ public class SPTPlaylistTrack: Codable {
      Information about the track.
      */
     public let track: SPTTrack
+    
+    // MARK: Codable stuff
+    private enum CodingKeys: String, CodingKey {
+        case track
+        case addedDate = "added_at"
+        case addedBy = "added_by"
+        case isLocal = "is_local"
+    }
+}
+
+extension SPTPlaylistTrack: CustomStringConvertible {
+    public var description: String {
+        return """
+        PlaylistTrack: \(track.name)
+        """
+    }
 }
