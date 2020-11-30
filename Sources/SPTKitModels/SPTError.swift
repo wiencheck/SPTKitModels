@@ -19,7 +19,7 @@
 
 import Foundation
 
-public class SPTError: Codable {
+public struct SPTError: Codable {
     /**
      The HTTP status code that is also returned in the response header. For further information, see https://developer.spotify.com/documentation/web-api/#response-status-codes.
      */
@@ -44,7 +44,7 @@ public class SPTError: Codable {
         self.message = message
     }
 
-    public required init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         let subcontainer = try container.nestedContainer(keyedBy: NestedCodingKeys.self, forKey: .error)
@@ -75,4 +75,5 @@ public extension SPTError {
     static let invalidCodingKey = SPTError(status: 54, message: "Couldn't create valid CodingKey")
     static let exceededRequestedIdCount = SPTError(status: 55, message: "Maximum number of requested ids was exceeded.")
     static let albumGroupsEmpty = SPTError(status: 56, message: "Album groups cannot be empty.")
+    static let badResponse = SPTError(status: 57, message: "Received invalid response.")
 }
