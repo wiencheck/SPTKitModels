@@ -30,6 +30,11 @@ public struct SPTError: Codable {
      */
     public let message: String
     
+    /**
+     Additional information about the error.
+     */
+    public var additionalHeaders: [AnyHashable: Any]?
+    
     // MARK: Codable stuff
     private enum CodingKeys: String, CodingKey {
         case error
