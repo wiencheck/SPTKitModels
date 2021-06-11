@@ -23,8 +23,8 @@ final class SPTDateFormatter {
     
     private let formatter = DateFormatter()
     
-    func date(from dateString: String, precision: SPTDatePrecision) -> Date {
+    func date(from dateString: String, precision: SPTDatePrecision) -> Date? {
         formatter.dateFormat = precision.dateFormat
-        return formatter.date(from: dateString)!
+        return formatter.date(from: dateString)
     }
 }

@@ -59,7 +59,7 @@ public class SPTSimplifiedAlbum: SPTBaseObject {
     /**
      The date the album was first released.
      */
-    public let releaseDate: Date
+    public let releaseDate: Date?
     
     public override var description: String {
         return """
