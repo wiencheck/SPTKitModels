@@ -18,7 +18,7 @@
 
 import Foundation
 
-public class SPTBaseObject: Codable, Hashable, CustomStringConvertible {
+public class SPTBaseObject: SPTBaseObjectProtocol, Encodable {
     /**
      The object type.
      */
@@ -42,13 +42,13 @@ public class SPTBaseObject: Codable, Hashable, CustomStringConvertible {
     /**
      Known external URLs for this object.
      */
-    public let externalUrls: [String: URL]
+    public let externalURLs: [String: URL]
     
     // MARK: Codable stuff
     private enum CodingKeys: String, CodingKey {
         case type, uri, id
         case url = "href"
-        case externalUrls = "external_urls"
+        case externalURLs = "external_urls"
     }
     
     // MARK: `CustomStringConvertible` conformance

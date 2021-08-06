@@ -19,7 +19,7 @@
 import Foundation
 
 /// Saved Album object containing reference to the full Album object.
-public class SPTSavedAlbum: Codable {
+public class SPTSavedAlbum: SPTSavedAlbumProtocol, Encodable {
     /**
      The date and time the album was saved.
      */

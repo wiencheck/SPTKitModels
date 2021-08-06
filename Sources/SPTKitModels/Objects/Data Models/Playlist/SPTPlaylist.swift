@@ -19,10 +19,8 @@
 import Foundation
 
 /// Full Playlist object.
-public class SPTPlaylist: SPTSimplifiedPlaylist {
-    /**
-     Information about the followers of the playlist.
-     */
+public class SPTPlaylist: SPTSimplifiedPlaylist, SPTPlaylistProtocol {
+    
     public let followers: SPTFollowers
     
     // MARK: Codable stuff

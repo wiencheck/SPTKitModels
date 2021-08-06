@@ -19,10 +19,8 @@
 import Foundation
 
 /// Simplified Playlist object.
-public class SPTSimplifiedArtist: SPTBaseObject {
-    /**
-     The name of this artist.
-     */
+public class SPTSimplifiedArtist: SPTBaseObject, SPTSimplifiedArtistProtocol {
+    
     public let name: String
     
     public override var description: String {
@@ -46,11 +44,5 @@ public class SPTSimplifiedArtist: SPTBaseObject {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(name, forKey: .name)
         try super.encode(to: encoder)
-    }
-}
-
-extension SPTSimplifiedArtist: Nestable {
-    public static var pluralKey: String {
-        return "artists"
     }
 }

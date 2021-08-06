@@ -19,46 +19,22 @@
 import Foundation
 
 /// Simplified Album object.
-public class SPTSimplifiedAlbum: SPTBaseObject {
+public class SPTSimplifiedAlbum: SPTBaseObject, SPTSimplifiedAlbumProtocol {
     
-    /**
-     The name of this album.
-     */
     public let name: String
     
-    /**
-     The field is present when getting an artist’s albums. Possible values are “album”, “single”, “compilation”, “appears_on”. Compare to album_type this field represents relationship between the artist and the album.
-     */
     public let albumGroup: AlbumGroup?
     
-    /**
-     The type of the album: one of “album”, “single”, or “compilation”.
-     */
     public let albumType: AlbumType
     
-    /**
-     The artists of the album. Each artist object includes a link in href to more detailed information about the artist.
-     */
     public let artists: [SPTSimplifiedArtist]
         
-    /**
-     The markets in which the album is available: ISO 3166-1 alpha-2 country codes. Note that an album is considered available in a market when at least 1 of its tracks is available in that market.
-     */
     public let availableMarkets: [String]
     
-    /**
-     The cover art for the album in various sizes, widest first.
-     */
     public let images: [SPTImage]
     
-    /**
-     The precision with which release_date value is known: "year" , "month" , or "day".
-     */
     public let releaseDatePrecision: SPTDatePrecision
     
-    /**
-     The date the album was first released.
-     */
     public let releaseDate: Date?
     
     public override var description: String {
@@ -107,22 +83,5 @@ public class SPTSimplifiedAlbum: SPTBaseObject {
         try container.encode(releaseDatePrecision, forKey: .releaseDatePrecision)
         try container.encode(releaseDate, forKey: .releaseDate)
         try super.encode(to: encoder)
-    }
-}
-
-extension SPTSimplifiedAlbum: Nestable {
-    public static var pluralKey: String {
-        return "albums"
-    }
-}
-
-public extension SPTSimplifiedAlbum {
-    enum AlbumType: String, Codable {
-        case album, single, compilation
-    }
-    
-    enum AlbumGroup: String, CaseIterable, Codable {
-        case album, single, compilation
-        case appearsOn = "appears_on"
     }
 }
