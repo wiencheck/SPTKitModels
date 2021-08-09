@@ -19,7 +19,7 @@
 import Foundation
 
 /// Simplified Track object.
-public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol {
+public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol, GRDBRecord {
     public let name: String
 
     public let artists: [SPTSimplifiedArtist]
@@ -64,6 +64,7 @@ public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol {
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
         name = try container.decode(String.self, forKey: .name)
         artists = try container.decode([SPTSimplifiedArtist].self, forKey: .artists)
         availableMarkets = try container.decodeIfPresent([String].self, forKey: .availableMarkets) ?? []
@@ -75,11 +76,13 @@ public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol {
         previewUrl = try container.decodeIfPresent(URL.self, forKey: .previewUrl)
         trackNumber = try container.decode(Int.self, forKey: .trackNumber)
         isLocal = try container.decode(Bool.self, forKey: .isLocal)
+        
         try super.init(from: decoder)
     }
 
     public override func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        
         try container.encode(name, forKey: .name)
         try container.encode(artists, forKey: .artists)
         try container.encode(availableMarkets, forKey: .availableMarkets)
@@ -91,6 +94,9 @@ public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol {
         try container.encodeIfPresent(previewUrl, forKey: .previewUrl)
         try container.encode(trackNumber, forKey: .trackNumber)
         try container.encode(isLocal, forKey: .isLocal)
+        
         try super.encode(to: encoder)
     }
+    
+    public class var databaseTableName: String { "simplifiedTrack" }
 }

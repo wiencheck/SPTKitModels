@@ -42,4 +42,6 @@ public class SPTPlaylist: SPTSimplifiedPlaylist, SPTPlaylistProtocol {
         
         try super.encode(to: encoder)
     }
+    
+    public override class var databaseTableName: String { "playlist" }
 }

@@ -19,7 +19,7 @@
 import Foundation
 
 /// Simplified Playlist object.
-public class SPTSimplifiedPlaylist: SPTBaseObject, SPTSimplifiedPlaylistProtocol {
+public class SPTSimplifiedPlaylist: SPTBaseObject, SPTSimplifiedPlaylistProtocol, GRDBRecord {
     
     public let isCollaborative: Bool
     
@@ -86,4 +86,6 @@ public class SPTSimplifiedPlaylist: SPTBaseObject, SPTSimplifiedPlaylistProtocol
         
         try super.encode(to: encoder)
     }
+    
+    public class var databaseTableName: String { "simplifiedPlaylist" }
 }

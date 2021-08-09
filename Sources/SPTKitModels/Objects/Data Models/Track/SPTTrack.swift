@@ -43,4 +43,7 @@ public class SPTTrack: SPTSimplifiedTrack, SPTTrackProtocol {
         try container.encode(popularity, forKey: .popularity)
         try super.encode(to: encoder)
     }
+    
+    public override class var databaseTableName: String { "track" }
+
 }

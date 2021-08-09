@@ -46,10 +46,6 @@ public class SPTAlbum: SPTSimplifiedAlbum, SPTAlbumProtocol {
         
         try super.init(from: decoder)
     }
-    
-    public required init() {
-        fatalError("SPTKit objects should not be created directly.")
-    }
 
     public override func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -61,4 +57,6 @@ public class SPTAlbum: SPTSimplifiedAlbum, SPTAlbumProtocol {
         
         try super.encode(to: encoder)
     }
+    
+    public override class var databaseTableName: String { "album" }
 }

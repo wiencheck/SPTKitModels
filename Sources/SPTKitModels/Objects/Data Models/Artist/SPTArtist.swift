@@ -51,6 +51,8 @@ public class SPTArtist: SPTSimplifiedArtist, SPTArtistProtocol {
         try container.encode(popularity, forKey: .popularity)
         try super.encode(to: encoder)
     }
+    
+    public override class var databaseTableName: String { "artist" }
 }
 
 /*

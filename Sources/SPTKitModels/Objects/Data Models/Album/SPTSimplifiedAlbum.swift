@@ -19,7 +19,7 @@
 import Foundation
 
 /// Simplified Album object.
-public class SPTSimplifiedAlbum: SPTBaseObject, SPTSimplifiedAlbumProtocol {
+public class SPTSimplifiedAlbum: SPTBaseObject, SPTSimplifiedAlbumProtocol, GRDBRecord {
     
     public let name: String
     
@@ -67,10 +67,6 @@ public class SPTSimplifiedAlbum: SPTBaseObject, SPTSimplifiedAlbumProtocol {
         releaseDate = SPTDateFormatter.shared.date(from: dateString, precision: releaseDatePrecision)
         try super.init(from: decoder)
     }
-    
-    public required init() {
-        fatalError("SPTKit objects should not be created directly.")
-    }
 
     public override func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
@@ -84,4 +80,6 @@ public class SPTSimplifiedAlbum: SPTBaseObject, SPTSimplifiedAlbumProtocol {
         try container.encode(releaseDate, forKey: .releaseDate)
         try super.encode(to: encoder)
     }
+    
+    public class var databaseTableName: String { "simplifiedAlbum" }
 }

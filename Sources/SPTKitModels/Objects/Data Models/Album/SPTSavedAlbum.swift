@@ -19,7 +19,7 @@
 import Foundation
 
 /// Saved Album object containing reference to the full Album object.
-public class SPTSavedAlbum: SPTSavedAlbumProtocol, Encodable {
+public class SPTSavedAlbum: SPTSavedAlbumProtocol, Encodable, GRDBRecord {
     /**
      The date and time the album was saved.
      */
@@ -35,6 +35,8 @@ public class SPTSavedAlbum: SPTSavedAlbumProtocol, Encodable {
         case addedDate = "added_at"
         case album
     }
+    
+    public class var databaseTableName: String { "savedAlbum" }
 }
 
 extension SPTSavedAlbum: CustomStringConvertible {

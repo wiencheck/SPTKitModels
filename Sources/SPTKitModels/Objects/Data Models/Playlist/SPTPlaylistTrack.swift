@@ -19,7 +19,7 @@
 import Foundation
 
 /// Playlist track object
-public class SPTPlaylistTrack: SPTPlaylistTrackProtocol, Encodable {
+public class SPTPlaylistTrack: SPTPlaylistTrackProtocol, Encodable, GRDBRecord {
     
     public let addedDate: Date?
     
@@ -36,6 +36,8 @@ public class SPTPlaylistTrack: SPTPlaylistTrackProtocol, Encodable {
         case addedBy = "added_by"
         case isLocal = "is_local"
     }
+    
+    public class var databaseTableName: String { "playlistTrack" }
 }
 
 extension SPTPlaylistTrack: CustomStringConvertible {

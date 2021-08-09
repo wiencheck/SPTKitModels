@@ -19,7 +19,7 @@
 import Foundation
 
 /// Saved Track object containing reference to the full Track object.
-public class SPTSavedTrack: SPTSavedTrackProtocol, Encodable {
+public class SPTSavedTrack: SPTSavedTrackProtocol, Encodable, GRDBRecord {
     
     public let addedDate: Date
     
@@ -30,6 +30,8 @@ public class SPTSavedTrack: SPTSavedTrackProtocol, Encodable {
         case track
         case addedDate = "added_at"
     }
+    
+    public class var databaseTableName: String { "savedTrack" }
 }
 
 extension SPTSavedTrack: CustomStringConvertible {
