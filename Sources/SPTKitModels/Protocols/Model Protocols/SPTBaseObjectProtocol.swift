@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol SPTBaseObjectProtocol: Decodable, Hashable, CustomStringConvertible {
+public protocol SPTBaseObjectProtocol: Decodable, Hashable {
     /**
      The object type.
      */

@@ -19,7 +19,7 @@
 /**
  Container class for encapsuling objects included in search response from Spotify service.
  */
-public class SPTSearchResponse: Codable {
+public class SPTSearchResponse: Decodable {
     /**
      Simplified track objects included in the response, wrapped in paging object.
      */

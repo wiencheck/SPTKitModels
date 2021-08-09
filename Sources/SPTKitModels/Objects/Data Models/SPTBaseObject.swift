@@ -17,54 +17,15 @@
 // THE SOFTWARE.
 
 import Foundation
+import CoreData
 
-public class SPTBaseObject: SPTBaseObjectProtocol, Encodable {
-    /**
-     The object type.
-     */
-    public let type: SPTObjectType
-    
-    /**
-     The Spotify URI for the object.
-     */
-    public let uri: String
-    
-    /**
-     The Spotify ID for the object.
-     */
-    public let id: String
-    
-    /**
-     A link to the Web API endpoint providing full details of the object.
-     */
-    public let url: URL
-    
-    /**
-     Known external URLs for this object.
-     */
-    public let externalURLs: [String: URL]
-    
-    // MARK: Codable stuff
-    private enum CodingKeys: String, CodingKey {
-        case type, uri, id
-        case url = "href"
-        case externalURLs = "external_urls"
-    }
-    
-    // MARK: `CustomStringConvertible` conformance
-    public var description: String {
-        return """
-            \(type), id: \(id)
-        """
-    }
-    
-    // MARK: `Equatable` conformance
-    public static func == (lhs: SPTBaseObject, rhs: SPTBaseObject) -> Bool {
-        return lhs.id == rhs.id
-    }
-    
-    // MARK: `Hashable` conformance
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(uri)
+extension Data {
+    func decoded<T>() -> T? where T: Decodable {
+        do {
+            return try JSONDecoder().decode(T.self, from: self)
+        } catch {
+            print("*** Decoding error: \(error)")
+        }
+        return nil
     }
 }

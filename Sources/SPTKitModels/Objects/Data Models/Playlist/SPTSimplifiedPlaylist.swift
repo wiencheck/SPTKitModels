@@ -19,7 +19,7 @@
 import Foundation
 
 /// Simplified Playlist object.
-public class SPTSimplifiedPlaylist: SPTBaseObject, SPTSimplifiedPlaylistProtocol {
+public class SPTSimplifiedPlaylist1: SPTBaseObject, SPTSimplifiedPlaylistProtocol {
     
     public let isCollaborative: Bool
     
