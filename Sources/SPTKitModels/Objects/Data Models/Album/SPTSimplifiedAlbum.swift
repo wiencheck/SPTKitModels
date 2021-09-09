@@ -55,6 +55,7 @@ public class SPTSimplifiedAlbum: SPTBaseObject, SPTSimplifiedAlbumProtocol, GRDB
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
         albumGroup = try container.decodeIfPresent(AlbumGroup.self, forKey: .albumGroup)
         albumType = try container.decodeIfPresent(AlbumType.self, forKey: .albumType) ?? .album
         artists = try container.decode([SPTSimplifiedArtist].self, forKey: .artists)
@@ -65,11 +66,13 @@ public class SPTSimplifiedAlbum: SPTBaseObject, SPTSimplifiedAlbumProtocol, GRDB
 
         let dateString = try container.decode(String.self, forKey: .releaseDate)
         releaseDate = SPTDateFormatter.shared.date(from: dateString, precision: releaseDatePrecision)
+        
         try super.init(from: decoder)
     }
 
     public override func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        
         try container.encodeIfPresent(albumGroup, forKey: .albumGroup)
         try container.encode(albumType, forKey: .albumType)
         try container.encode(artists, forKey: .artists)
@@ -78,6 +81,7 @@ public class SPTSimplifiedAlbum: SPTBaseObject, SPTSimplifiedAlbumProtocol, GRDB
         try container.encode(name, forKey: .name)
         try container.encode(releaseDatePrecision, forKey: .releaseDatePrecision)
         try container.encode(releaseDate, forKey: .releaseDate)
+        
         try super.encode(to: encoder)
     }
     
