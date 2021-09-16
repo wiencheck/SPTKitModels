@@ -18,7 +18,7 @@
 
 import Foundation
 
-public class SPTBaseObject: SPTBaseObjectProtocol, Encodable {
+public class SPTBaseObject: SPTBaseObjectProtocol, Encodable, GRDBRecord {
     /**
      The object type.
      */
@@ -67,4 +67,7 @@ public class SPTBaseObject: SPTBaseObjectProtocol, Encodable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(uri)
     }
+    
+    // MARK: GRDB conformance
+    public class var databaseTableName: String { fatalError("*** Must override in subclasses.") }
 }

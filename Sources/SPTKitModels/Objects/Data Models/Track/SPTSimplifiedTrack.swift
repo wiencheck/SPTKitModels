@@ -19,7 +19,7 @@
 import Foundation
 
 /// Simplified Track object.
-public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol, GRDBRecord {
+public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol {
     public let name: String
 
     public let artists: [SPTSimplifiedArtist]
@@ -98,5 +98,5 @@ public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol, GRDB
         try super.encode(to: encoder)
     }
     
-    public class var databaseTableName: String { "simplifiedTrack" }
+    public override class var databaseTableName: String { "simplifiedTrack" }
 }

@@ -19,7 +19,7 @@
 import Foundation
 
 /// Simplified Album object.
-public class SPTSimplifiedAlbum: SPTBaseObject, SPTSimplifiedAlbumProtocol, GRDBRecord {
+public class SPTSimplifiedAlbum: SPTBaseObject, SPTSimplifiedAlbumProtocol {
     
     public let name: String
     
@@ -85,5 +85,5 @@ public class SPTSimplifiedAlbum: SPTBaseObject, SPTSimplifiedAlbumProtocol, GRDB
         try super.encode(to: encoder)
     }
     
-    public class var databaseTableName: String { "simplifiedAlbum" }
+    public override class var databaseTableName: String { "simplifiedAlbum" }
 }

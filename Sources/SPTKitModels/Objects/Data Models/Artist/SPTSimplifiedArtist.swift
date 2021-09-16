@@ -19,7 +19,7 @@
 import Foundation
 
 /// Simplified Playlist object.
-public class SPTSimplifiedArtist: SPTBaseObject, SPTSimplifiedArtistProtocol, GRDBRecord {
+public class SPTSimplifiedArtist: SPTBaseObject, SPTSimplifiedArtistProtocol {
     
     public let name: String
     
@@ -46,5 +46,5 @@ public class SPTSimplifiedArtist: SPTBaseObject, SPTSimplifiedArtistProtocol, GR
         try super.encode(to: encoder)
     }
     
-    public class var databaseTableName: String { "simplifiedArtist" }
+    public override class var databaseTableName: String { "simplifiedArtist" }
 }
