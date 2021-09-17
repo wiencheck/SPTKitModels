@@ -40,6 +40,7 @@ public class SPTArtist: SPTSimplifiedArtist, SPTArtistProtocol {
         genres = try container.decode([String].self, forKey: .genres)
         images = try container.decode([SPTImage].self, forKey: .images)
         popularity = try container.decode(Int.self, forKey: .popularity)
+        
         try super.init(from: decoder)
     }
 

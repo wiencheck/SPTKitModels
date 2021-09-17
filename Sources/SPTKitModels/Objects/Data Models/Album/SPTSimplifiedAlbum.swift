@@ -64,8 +64,12 @@ public class SPTSimplifiedAlbum: SPTBaseObject, SPTSimplifiedAlbumProtocol {
         name = try container.decode(String.self, forKey: .name)
         releaseDatePrecision = try container.decode(SPTDatePrecision.self, forKey: .releaseDatePrecision)
 
-        let dateString = try container.decode(String.self, forKey: .releaseDate)
-        releaseDate = SPTDateFormatter.shared.date(from: dateString, precision: releaseDatePrecision)
+        if let date = try container.decodeIfPresent(Date.self, forKey: .releaseDate) {
+            releaseDate = date
+        } else {
+            let dateString = try container.decode(String.self, forKey: .releaseDate)
+            releaseDate = SPTDateFormatter.shared.date(from: dateString, precision: releaseDatePrecision)
+        }
         
         try super.init(from: decoder)
     }

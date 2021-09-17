@@ -51,7 +51,7 @@ public protocol SPTSimplifiedTrackProtocol: SPTBaseObjectProtocol, Nestable {
     /**
      A link to a 30 second preview (MP3 format) of the track. Can be null
     */
-    var previewUrl: URL? { get }
+    var previewURL: URL? { get }
     
     /**
      The number of the track. If an album has several discs, the track number is the number on the specified disc.

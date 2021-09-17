@@ -38,6 +38,7 @@ public class SPTAlbum: SPTSimplifiedAlbum, SPTAlbumProtocol {
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
         copyrights = try container.decode([SPTCopyright].self, forKey: .copyrights)
         genres = try container.decode([String].self, forKey: .genres)
         label = try container.decode(String.self, forKey: .label)

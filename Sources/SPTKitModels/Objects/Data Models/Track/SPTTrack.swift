@@ -17,6 +17,7 @@
 // THE SOFTWARE.
 
 import Foundation
+import GRDB
 
 /// Full Track object.
 public class SPTTrack: SPTSimplifiedTrack, SPTTrackProtocol {
@@ -32,11 +33,13 @@ public class SPTTrack: SPTSimplifiedTrack, SPTTrackProtocol {
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
         album = try container.decode(SPTSimplifiedAlbum.self, forKey: .album)
         popularity = try container.decode(Int.self, forKey: .popularity)
+        
         try super.init(from: decoder)
     }
-
+    
     public override func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(album, forKey: .album)
@@ -44,6 +47,26 @@ public class SPTTrack: SPTSimplifiedTrack, SPTTrackProtocol {
         try super.encode(to: encoder)
     }
     
+    public class Columns: SPTSimplifiedTrack.Columns {
+        public static let album = Column(CodingKeys.album)
+        public static let popularity = Column(CodingKeys.popularity)
+    }
+    
     public override class var databaseTableName: String { "track" }
-
+    
+    override class var tableDefinitions: (TableDefinition) -> Void {
+        { table in
+            super.tableDefinitions(table)
+            
+            table.column(CodingKeys.album.rawValue, .blob).notNull()
+            table.column(CodingKeys.popularity.rawValue, .integer).notNull()
+        }
+    }
+    
+    public override class var migration: (identifier: String, migrate: (Database) throws -> Void) {
+        return ("createTracks", { db in
+            try db.create(table: databaseTableName, body: tableDefinitions)
+        })
+    }
+    
 }

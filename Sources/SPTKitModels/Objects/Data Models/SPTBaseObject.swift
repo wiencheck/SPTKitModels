@@ -17,6 +17,7 @@
 // THE SOFTWARE.
 
 import Foundation
+import GRDB
 
 public class SPTBaseObject: SPTBaseObjectProtocol, Encodable, GRDBRecord {
     /**
@@ -68,6 +69,30 @@ public class SPTBaseObject: SPTBaseObjectProtocol, Encodable, GRDBRecord {
         hasher.combine(uri)
     }
     
-    // MARK: GRDB conformance
+    // MARK: GRDB stuff
+    public class Columns {
+        public static let type = Column(CodingKeys.type)
+        public static let uri = Column(CodingKeys.uri)
+        public static let id = Column(CodingKeys.id)
+        public static let url = Column(CodingKeys.url)
+        public static let externalURLs = Column(CodingKeys.externalURLs)
+        
+        private init() {}
+    }
+    
     public class var databaseTableName: String { fatalError("*** Must override in subclasses.") }
+    
+    class var tableDefinitions: (TableDefinition) -> Void {
+        { table in
+            table.column(CodingKeys.id.rawValue, .text).notNull()
+                .primaryKey()
+                .unique(onConflict: .ignore)
+            table.column(CodingKeys.type.rawValue, .text).notNull()
+            table.column(CodingKeys.uri.rawValue, .text).notNull()
+            table.column(CodingKeys.url.rawValue, .text).notNull()
+            table.column(CodingKeys.externalURLs.rawValue, .blob).notNull()
+        }
+    }
+    
+    public class var migration: (identifier: String, migrate: (Database) throws -> Void) { fatalError("*** Must override in subclasses.") }
 }

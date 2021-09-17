@@ -17,6 +17,7 @@
 // THE SOFTWARE.
 
 import Foundation
+import GRDB
 
 /// Simplified Track object.
 public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol {
@@ -36,7 +37,7 @@ public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol {
     
     public let linkedFrom: SPTLinkedTrack?
     
-    public let previewUrl: URL?
+    public let previewURL: URL?
     
     public let trackNumber: Int
     
@@ -57,7 +58,7 @@ public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol {
         case isExplicit = "is_explicit"
         case isPlayable = "is_playable"
         case linkedFrom = "linked_from"
-        case previewUrl = "preview_url"
+        case previewURL = "preview_url"
         case trackNumber = "track_number"
         case isLocal = "is_local"
     }
@@ -73,7 +74,7 @@ public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol {
         isExplicit = try container.decodeIfPresent(Bool.self, forKey: .isExplicit) ?? false
         isPlayable = try container.decodeIfPresent(Bool.self, forKey: .isPlayable) ?? true
         linkedFrom = try container.decodeIfPresent(SPTLinkedTrack.self, forKey: .linkedFrom)
-        previewUrl = try container.decodeIfPresent(URL.self, forKey: .previewUrl)
+        previewURL = try container.decodeIfPresent(URL.self, forKey: .previewURL)
         trackNumber = try container.decode(Int.self, forKey: .trackNumber)
         isLocal = try container.decode(Bool.self, forKey: .isLocal)
         
@@ -91,12 +92,50 @@ public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol {
         try container.encode(isExplicit, forKey: .isExplicit)
         try container.encode(isPlayable, forKey: .isPlayable)
         try container.encodeIfPresent(linkedFrom, forKey: .linkedFrom)
-        try container.encodeIfPresent(previewUrl, forKey: .previewUrl)
+        try container.encodeIfPresent(previewURL, forKey: .previewURL)
         try container.encode(trackNumber, forKey: .trackNumber)
         try container.encode(isLocal, forKey: .isLocal)
         
         try super.encode(to: encoder)
     }
     
+    public class Columns: SPTBaseObject.Columns {
+        public static let name = Column(CodingKeys.name)
+        public static let artists = Column(CodingKeys.artists)
+        public static let availableMarkets = Column(CodingKeys.availableMarkets)
+        public static let discNumber = Column(CodingKeys.discNumber)
+        public static let durationMs = Column(CodingKeys.durationMs)
+        public static let isExplicit = Column(CodingKeys.isExplicit)
+        public static let isPlayable = Column(CodingKeys.isPlayable)
+        public static let linkedFrom = Column(CodingKeys.linkedFrom)
+        public static let previewURL = Column(CodingKeys.previewURL)
+        public static let trackNumber = Column(CodingKeys.trackNumber)
+        public static let isLocal = Column(CodingKeys.isLocal)
+    }
+    
     public override class var databaseTableName: String { "simplifiedTrack" }
+    
+    override class var tableDefinitions: (TableDefinition) -> Void {
+        { table in
+            super.tableDefinitions(table)
+            
+            table.column(CodingKeys.name.rawValue, .text).notNull()
+            table.column(CodingKeys.artists.rawValue, .blob)
+            table.column(CodingKeys.availableMarkets.rawValue, .blob).notNull()
+            table.column(CodingKeys.discNumber.rawValue, .integer).notNull()
+            table.column(CodingKeys.durationMs.rawValue, .integer).notNull()
+            table.column(CodingKeys.isExplicit.rawValue, .boolean).notNull()
+            table.column(CodingKeys.isPlayable.rawValue, .boolean).notNull()
+            table.column(CodingKeys.linkedFrom.rawValue, .blob)
+            table.column(CodingKeys.previewURL.rawValue, .text)
+            table.column(CodingKeys.trackNumber.rawValue, .integer).notNull()
+            table.column(CodingKeys.isLocal.rawValue, .boolean).notNull()
+        }
+    }
+    
+    public override class var migration: (identifier: String, migrate: (Database) throws -> Void) {
+        return ("createSimplifiedTracks", { db in
+            try db.create(table: databaseTableName, body: tableDefinitions)
+        })
+    }
 }

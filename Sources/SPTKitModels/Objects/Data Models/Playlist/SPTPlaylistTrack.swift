@@ -17,6 +17,7 @@
 // THE SOFTWARE.
 
 import Foundation
+import GRDB
 
 /// Playlist track object
 public class SPTPlaylistTrack: SPTPlaylistTrackProtocol, Encodable, GRDBRecord {
@@ -38,6 +39,8 @@ public class SPTPlaylistTrack: SPTPlaylistTrackProtocol, Encodable, GRDBRecord {
     }
     
     public class var databaseTableName: String { "playlistTrack" }
+    
+    public class var migration: (identifier: String, migrate: (Database) throws -> Void) { fatalError() }
 }
 
 extension SPTPlaylistTrack: CustomStringConvertible {

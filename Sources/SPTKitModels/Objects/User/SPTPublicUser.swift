@@ -47,9 +47,11 @@ public class SPTPublicUser: SPTBaseObject {
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
         displayName = try container.decodeIfPresent(String.self, forKey: .displayName)
         followers = try container.decodeIfPresent(SPTFollowers.self, forKey: .followers)
         images = try container.decodeIfPresent([SPTImage].self, forKey: .images)
+        
         try super.init(from: decoder)
     }
 

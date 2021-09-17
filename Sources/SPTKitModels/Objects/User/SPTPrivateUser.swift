@@ -42,9 +42,11 @@ public class SPTPrivateUser: SPTPublicUser {
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
         country = try container.decodeIfPresent(String.self, forKey: .country)
         email = try container.decodeIfPresent(String.self, forKey: .email)
         product = try container.decodeIfPresent(String.self, forKey: .product)
+        
         try super.init(from: decoder)
     }
 

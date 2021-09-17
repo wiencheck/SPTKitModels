@@ -36,7 +36,9 @@ public class SPTSimplifiedArtist: SPTBaseObject, SPTSimplifiedArtistProtocol {
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
         name = try container.decode(String.self, forKey: .name)
+        
         try super.init(from: decoder)
     }
 
