@@ -43,6 +43,8 @@ public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol {
     
     public let isLocal: Bool
     
+    public var albumId: String?
+    
     public override var description: String {
         return """
            Track: \"\(name)\", artists: \(artists), uri: \(uri)
@@ -51,7 +53,7 @@ public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol {
     
     // MARK: Codable stuff
     private enum CodingKeys: String, CodingKey {
-        case name, artists, popularity
+        case name, artists, popularity, albumId
         case availableMarkets = "available_markets"
         case discNumber = "disc_number"
         case durationMs = "duration_ms"
@@ -77,6 +79,7 @@ public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol {
         previewURL = try container.decodeIfPresent(URL.self, forKey: .previewURL)
         trackNumber = try container.decode(Int.self, forKey: .trackNumber)
         isLocal = try container.decode(Bool.self, forKey: .isLocal)
+        albumId = try container.decodeIfPresent(String.self, forKey: .albumId)
         
         try super.init(from: decoder)
     }
@@ -86,17 +89,23 @@ public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol {
         
         try container.encode(name, forKey: .name)
         try container.encode(artists, forKey: .artists)
-        try container.encode(availableMarkets, forKey: .availableMarkets)
+        try container.encodeIfPresent(availableMarkets, forKey: .availableMarkets)
         try container.encode(discNumber, forKey: .discNumber)
         try container.encode(durationMs, forKey: .durationMs)
-        try container.encode(isExplicit, forKey: .isExplicit)
+        try container.encodeIfPresent(isExplicit, forKey: .isExplicit)
         try container.encode(isPlayable, forKey: .isPlayable)
         try container.encodeIfPresent(linkedFrom, forKey: .linkedFrom)
         try container.encodeIfPresent(previewURL, forKey: .previewURL)
         try container.encode(trackNumber, forKey: .trackNumber)
         try container.encode(isLocal, forKey: .isLocal)
+        try container.encodeIfPresent(albumId, forKey: .albumId)
         
         try super.encode(to: encoder)
+    }
+    
+    private static let linkedAlbumAssociation = belongsTo(SPTSimplifiedAlbum.self)
+    var linkedAlbum: QueryInterfaceRequest<SPTSimplifiedAlbum> {
+        request(for: Self.linkedAlbumAssociation)
     }
     
     public class Columns: SPTBaseObject.Columns {
@@ -111,6 +120,7 @@ public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol {
         public static let previewURL = Column(CodingKeys.previewURL)
         public static let trackNumber = Column(CodingKeys.trackNumber)
         public static let isLocal = Column(CodingKeys.isLocal)
+        public static let albumId = Column(CodingKeys.isLocal)
     }
     
     public override class var databaseTableName: String { "simplifiedTrack" }
@@ -130,6 +140,9 @@ public class SPTSimplifiedTrack: SPTBaseObject, SPTSimplifiedTrackProtocol {
             table.column(CodingKeys.previewURL.rawValue, .text)
             table.column(CodingKeys.trackNumber.rawValue, .integer).notNull()
             table.column(CodingKeys.isLocal.rawValue, .boolean).notNull()
+            
+            table.column(CodingKeys.albumId.rawValue, .text)
+                .references(SPTSimplifiedAlbum.databaseTableName, onDelete: .cascade)
         }
     }
     

@@ -17,6 +17,7 @@
 // THE SOFTWARE.
 
 import Foundation
+import GRDB
 
 /// Full Album object.
 public class SPTAlbum: SPTSimplifiedAlbum, SPTAlbumProtocol {
@@ -60,4 +61,22 @@ public class SPTAlbum: SPTSimplifiedAlbum, SPTAlbumProtocol {
     }
     
     public override class var databaseTableName: String { "album" }
+    
+    override class var tableDefinitions: (TableDefinition) -> Void {
+        { table in
+            super.tableDefinitions(table)
+            
+            table.column(CodingKeys.copyrights.rawValue, .text).notNull()
+            table.column(CodingKeys.genres.rawValue, .blob).notNull()
+            table.column(CodingKeys.label.rawValue, .text).notNull()
+            table.column(CodingKeys.popularity.rawValue, .integer).notNull()
+            table.column(CodingKeys.tracks.rawValue, .blob).notNull()
+        }
+    }
+    
+    public override class var migration: (identifier: String, migrate: (Database) throws -> Void) {
+        ("createAlbums", { db in
+            try db.create(table: databaseTableName, body: tableDefinitions)
+        })
+    }
 }

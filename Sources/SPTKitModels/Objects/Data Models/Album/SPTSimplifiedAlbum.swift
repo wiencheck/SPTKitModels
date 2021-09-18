@@ -17,6 +17,7 @@
 // THE SOFTWARE.
 
 import Foundation
+import GRDB
 
 /// Simplified Album object.
 public class SPTSimplifiedAlbum: SPTBaseObject, SPTSimplifiedAlbumProtocol {
@@ -64,7 +65,8 @@ public class SPTSimplifiedAlbum: SPTBaseObject, SPTSimplifiedAlbumProtocol {
         name = try container.decode(String.self, forKey: .name)
         releaseDatePrecision = try container.decode(SPTDatePrecision.self, forKey: .releaseDatePrecision)
 
-        if let date = try container.decodeIfPresent(Date.self, forKey: .releaseDate) {
+        /* During encoding `releaseDate` is stored as Date, as opposed to JSON response which contains this value in String. */
+        if let date = try? container.decode(Date.self, forKey: .releaseDate) {
             releaseDate = date
         } else {
             let dateString = try container.decode(String.self, forKey: .releaseDate)
@@ -89,5 +91,36 @@ public class SPTSimplifiedAlbum: SPTBaseObject, SPTSimplifiedAlbumProtocol {
         try super.encode(to: encoder)
     }
     
+    private class let simplifiedTracksAssociation = hasMany(SPTSimplifiedTrack.self)
+    public var linkedSimplifiedTracks: QueryInterfaceRequest<SPTSimplifiedTrack> {
+        request(for: Self.simplifiedTracksAssociation)
+    }
+    
+    private static let tracksAssociation = hasMany(SPTTrack.self)
+    public var linkedTracks: QueryInterfaceRequest<SPTTrack> {
+        request(for: Self.tracksAssociation)
+    }
+
     public override class var databaseTableName: String { "simplifiedAlbum" }
+    
+    override class var tableDefinitions: (TableDefinition) -> Void {
+        { table in
+            super.tableDefinitions(table)
+            
+            table.column(CodingKeys.albumGroup.rawValue, .text)
+            table.column(CodingKeys.albumType.rawValue, .text).notNull()
+            table.column(CodingKeys.artists.rawValue, .blob).notNull()
+            table.column(CodingKeys.availableMarkets.rawValue, .blob).notNull()
+            table.column(CodingKeys.images.rawValue, .blob).notNull()
+            table.column(CodingKeys.name.rawValue, .text).notNull()
+            table.column(CodingKeys.releaseDatePrecision.rawValue, .text).notNull()
+            table.column(CodingKeys.releaseDate.rawValue, .date).notNull()
+        }
+    }
+    
+    public override class var migration: (identifier: String, migrate: (Database) throws -> Void) {
+        ("createSimplifiedAlbums", { db in
+            try db.create(table: databaseTableName, body: tableDefinitions)
+        })
+    }
 }
