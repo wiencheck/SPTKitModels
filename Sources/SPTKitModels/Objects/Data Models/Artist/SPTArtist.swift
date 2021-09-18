@@ -17,39 +17,55 @@
 // THE SOFTWARE.
 
 import Foundation
+import GRDB
 
 /// Full Artist object.
-public class SPTArtist: SPTSimplifiedArtist, SPTArtistProtocol {
-
-    public let followers: SPTFollowers
+public class SPTArtist: SPTBaseObject, SPTArtistProtocol {
     
-    public let genres: [String]
+    public let name: String
 
-    public let images: [SPTImage]
+    public let followers: SPTFollowers?
     
-    public let popularity: Int
+    public let genres: [String]?
+
+    public let images: [SPTImage]?
+    
+    public let popularity: Int?
+    
+    public override var description: String {
+        return """
+           Artist: \"\(name)\", uri: \(uri)
+        """
+    }
     
     // MARK: Codable stuff
     private enum CodingKeys: String, CodingKey {
-        case followers, genres, images, popularity
+        case name, followers, genres, images, popularity
     }
     
     public required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        followers = try container.decode(SPTFollowers.self, forKey: .followers)
-        genres = try container.decode([String].self, forKey: .genres)
-        images = try container.decode([SPTImage].self, forKey: .images)
-        popularity = try container.decode(Int.self, forKey: .popularity)
+        
+        name = try container.decode(String.self, forKey: .name)
+        
+        followers = try container.decodeIfPresent(SPTFollowers.self, forKey: .followers)
+        genres = try container.decodeIfPresent([String].self, forKey: .genres)
+        images = try container.decodeIfPresent([SPTImage].self, forKey: .images)
+        popularity = try container.decodeIfPresent(Int.self, forKey: .popularity)
         
         try super.init(from: decoder)
     }
 
     public override func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(followers, forKey: .followers)
-        try container.encode(genres, forKey: .genres)
-        try container.encode(images, forKey: .images)
-        try container.encode(popularity, forKey: .popularity)
+        
+        try container.encode(name, forKey: .name)
+        
+        try container.encodeIfPresent(followers, forKey: .followers)
+        try container.encodeIfPresent(genres, forKey: .genres)
+        try container.encodeIfPresent(images, forKey: .images)
+        try container.encodeIfPresent(popularity, forKey: .popularity)
+        
         try super.encode(to: encoder)
     }
     

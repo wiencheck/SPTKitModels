@@ -23,24 +23,24 @@ public class SPTSearchResponse: Codable {
     /**
      Simplified track objects included in the response, wrapped in paging object.
      */
-    public let tracks: SPTPagingObject<SPTSimplifiedTrack>?
+    public let tracks: SPTPagingObject<SPTTrack>?
     
     /**
      Simplified album objects included in the response, wrapped in paging object.
      */
-    public let albums: SPTPagingObject<SPTSimplifiedAlbum>?
+    public let albums: SPTPagingObject<SPTAlbum>?
     
     /**
      Simplified artist objects included in the response, wrapped in paging object.
      */
-    public let artists: SPTPagingObject<SPTSimplifiedArtist>?
+    public let artists: SPTPagingObject<SPTArtist>?
     
     /**
      Simplified playlist objects included in the response, wrapped in paging object.
      */
-    public let playlists: SPTPagingObject<SPTSimplifiedPlaylist>?
+    public let playlists: SPTPagingObject<SPTPlaylist>?
     
-//    public let shows: SPTPagingObject<SPTSimplifiedAlbum>?
+//    public let shows: SPTPagingObject<SPTAlbum>?
 //
-//    public let episodes: SPTPagingObject<SPTSimplifiedAlbum>?
+//    public let episodes: SPTPagingObject<SPTAlbum>?
 }

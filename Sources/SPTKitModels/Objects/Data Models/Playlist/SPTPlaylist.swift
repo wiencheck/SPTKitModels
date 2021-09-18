@@ -17,28 +17,79 @@
 // THE SOFTWARE.
 
 import Foundation
+import GRDB
 
 /// Full Playlist object.
-public class SPTPlaylist: SPTSimplifiedPlaylist, SPTPlaylistProtocol {
+public class SPTPlaylist: SPTBaseObject, SPTPlaylistProtocol {
     
-    public let followers: SPTFollowers
+    public let isCollaborative: Bool
+    
+    public let descriptionText: String?
+    
+    public let images: [SPTImage]
+    
+    public let name: String
+    
+    public let owner: SPTPublicUser
+    
+    public let isPublic: Bool?
+    
+    public let snapshotId: String
+    
+    public let total: Int
+    
+    public let followers: SPTFollowers?
+    
+    public override var description: String {
+        return """
+           Playlist: \"\(name)\", total: \(total), uri: \(uri)
+        """
+    }
     
     // MARK: Codable stuff
     private enum CodingKeys: String, CodingKey {
-        case followers
+        case images, name, owner, tracks, followers
+        case isCollaborative = "collaborative"
+        case descriptionText = "description"
+        case snapshotId = "snapshot_id"
+        case isPublic = "public"
+    }
+    
+    private enum TracksCodingKeys: String, CodingKey {
+        case total
     }
 
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        followers = try container.decode(SPTFollowers.self, forKey: .followers)
+        images = try container.decode([SPTImage].self, forKey: .images)
+        name = try container.decode(String.self, forKey: .name)
+        owner = try container.decode(SPTPublicUser.self, forKey: .owner)
+        isCollaborative = try container.decode(Bool.self, forKey: .isCollaborative)
+        descriptionText = try container.decodeIfPresent(String.self, forKey: .descriptionText)
+        snapshotId = try container.decode(String.self, forKey: .snapshotId)
+        isPublic = try container.decodeIfPresent(Bool.self, forKey: .isPublic)
+        
+        let subcontainer = try container.nestedContainer(keyedBy: TracksCodingKeys.self, forKey: .tracks)
+        total = try subcontainer.decode(Int.self, forKey: .total)
+        
+        followers = try container.decodeIfPresent(SPTFollowers.self, forKey: .followers)
         
         try super.init(from: decoder)
     }
 
     public override func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(followers, forKey: .followers)
+        
+        try container.encode(images, forKey: .images)
+        try container.encode(name, forKey: .name)
+        try container.encode(owner, forKey: .owner)
+        try container.encode(isCollaborative, forKey: .isCollaborative)
+        try container.encode(descriptionText, forKey: .descriptionText)
+        try container.encode(snapshotId, forKey: .snapshotId)
+        try container.encode(isPublic, forKey: .isPublic)
+        
+        try container.encodeIfPresent(followers, forKey: .followers)
         
         try super.encode(to: encoder)
     }
