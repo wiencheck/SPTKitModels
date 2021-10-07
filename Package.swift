@@ -1,14 +1,14 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "SPTKitModels",
-    platforms: [.macOS(.v10_12),
+    platforms: [.macOS(.v10_10),
                 .iOS(.v10),
-                .tvOS(.v10),
-                .watchOS(.v3)],
+                .tvOS(.v9),
+                .watchOS(.v2)],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
