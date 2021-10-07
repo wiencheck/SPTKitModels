@@ -48,7 +48,7 @@ public class SPTPlaylist: SPTBaseObject, SPTPlaylistProtocol {
     
     // MARK: Codable stuff
     private enum CodingKeys: String, CodingKey {
-        case images, name, owner, tracks, followers
+        case images, name, owner, tracks, followers, total
         case isCollaborative = "collaborative"
         case descriptionText = "description"
         case snapshotId = "snapshot_id"
@@ -70,8 +70,12 @@ public class SPTPlaylist: SPTBaseObject, SPTPlaylistProtocol {
         snapshotId = try container.decode(String.self, forKey: .snapshotId)
         isPublic = try container.decodeIfPresent(Bool.self, forKey: .isPublic)
         
-        let subcontainer = try container.nestedContainer(keyedBy: TracksCodingKeys.self, forKey: .tracks)
-        total = try subcontainer.decode(Int.self, forKey: .total)
+        if let total = try container.decodeIfPresent(Int.self, forKey: .total) {
+            self.total = total
+        } else {
+            let subcontainer = try container.nestedContainer(keyedBy: TracksCodingKeys.self, forKey: .tracks)
+            total = try subcontainer.decode(Int.self, forKey: .total)
+        }
         
         followers = try container.decodeIfPresent(SPTFollowers.self, forKey: .followers)
         
@@ -85,9 +89,10 @@ public class SPTPlaylist: SPTBaseObject, SPTPlaylistProtocol {
         try container.encode(name, forKey: .name)
         try container.encode(owner, forKey: .owner)
         try container.encode(isCollaborative, forKey: .isCollaborative)
-        try container.encode(descriptionText, forKey: .descriptionText)
+        try container.encodeIfPresent(descriptionText, forKey: .descriptionText)
         try container.encode(snapshotId, forKey: .snapshotId)
-        try container.encode(isPublic, forKey: .isPublic)
+        try container.encodeIfPresent(isPublic, forKey: .isPublic)
+        try container.encode(total, forKey: .total)
         
         try container.encodeIfPresent(followers, forKey: .followers)
         
@@ -95,4 +100,21 @@ public class SPTPlaylist: SPTBaseObject, SPTPlaylistProtocol {
     }
     
     public override class var databaseTableName: String { "playlist" }
+    
+    override class var tableDefinitions: (TableDefinition) -> Void {
+        { table in
+            super.tableDefinitions(table)
+            
+            table.column(CodingKeys.images.rawValue, .blob).notNull()
+            table.column(CodingKeys.name.rawValue, .text).notNull()
+            table.column(CodingKeys.owner.rawValue, .blob).notNull()
+            table.column(CodingKeys.isCollaborative.rawValue, .boolean).notNull()
+            table.column(CodingKeys.descriptionText.rawValue, .text)
+            table.column(CodingKeys.snapshotId.rawValue, .text).notNull()
+            table.column(CodingKeys.isPublic.rawValue, .boolean)
+            table.column(CodingKeys.total.rawValue, .integer).notNull()
+            
+            table.column(CodingKeys.followers.rawValue, .blob)
+        }
+    }
 }

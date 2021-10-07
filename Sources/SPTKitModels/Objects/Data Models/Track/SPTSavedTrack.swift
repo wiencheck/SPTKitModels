@@ -20,7 +20,7 @@ import Foundation
 import GRDB
 
 /// Saved Track object containing reference to the full Track object.
-public class SPTSavedTrack: SPTSavedTrackProtocol, Encodable, GRDBRecord {
+public class SPTSavedTrack: SPTSavedTrackProtocol, Encodable {
     
     public let addedDate: Date
     
@@ -31,10 +31,6 @@ public class SPTSavedTrack: SPTSavedTrackProtocol, Encodable, GRDBRecord {
         case track
         case addedDate = "added_at"
     }
-    
-    public class var databaseTableName: String { "savedTrack" }
-    
-    public class var migration: (identifier: String, migrate: (Database) throws -> Void) { fatalError() }
 }
 
 extension SPTSavedTrack: CustomStringConvertible {

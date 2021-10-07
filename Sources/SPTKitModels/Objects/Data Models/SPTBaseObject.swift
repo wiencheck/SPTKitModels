@@ -94,5 +94,13 @@ public class SPTBaseObject: SPTBaseObjectProtocol, Encodable, GRDBRecord {
         }
     }
     
-    public class var migration: (identifier: String, migrate: (Database) throws -> Void) { fatalError("*** Must override in subclasses.") }
+    public class var migration: Migration {
+        let migrationTitle = "create\(databaseTableName.capitalized)"
+        return (migrationTitle, { db in
+            try db.create(table: databaseTableName, body: tableDefinitions)
+        })
+    }
 }
+
+@available (swift 5.1)
+extension SPTBaseObject: Identifiable {}

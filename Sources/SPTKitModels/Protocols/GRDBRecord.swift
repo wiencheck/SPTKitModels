@@ -7,6 +7,8 @@
 
 import GRDB
 
+public typealias Migration = (identifier: String, migrate: (Database) throws -> Void)
+
 public protocol GRDBRecord: FetchableRecord & PersistableRecord {
-    static var migration: (identifier: String, migrate: (Database) throws -> Void) { get }
+    static var migration: Migration { get }
 }

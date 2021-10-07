@@ -115,11 +115,6 @@ public class SPTAlbum: SPTBaseObject, SPTAlbumProtocol {
         try super.encode(to: encoder)
     }
     
-    private static let tracksAssociation = hasMany(SPTTrack.self)
-    public var linkedTracks: QueryInterfaceRequest<SPTTrack> {
-        request(for: Self.tracksAssociation)
-    }
-    
     public override class var databaseTableName: String { "album" }
     
     override class var tableDefinitions: (TableDefinition) -> Void {
@@ -141,11 +136,5 @@ public class SPTAlbum: SPTBaseObject, SPTAlbumProtocol {
             table.column(CodingKeys.popularity.rawValue, .integer)
             table.column(CodingKeys.tracks.rawValue, .blob)
         }
-    }
-    
-    public override class var migration: (identifier: String, migrate: (Database) throws -> Void) {
-        ("createAlbums", { db in
-            try db.create(table: databaseTableName, body: tableDefinitions)
-        })
     }
 }

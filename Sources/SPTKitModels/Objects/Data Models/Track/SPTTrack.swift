@@ -53,7 +53,7 @@ public class SPTTrack: SPTBaseObject, SPTTrackProtocol {
      
      `nil` by default, should be set externally in order to estabilish association with the album.
      */
-    public var albumId: String?
+    //public var albumId: String?
     
     public override var description: String {
         return """
@@ -63,7 +63,7 @@ public class SPTTrack: SPTBaseObject, SPTTrackProtocol {
     
     // MARK: Codable stuff
     private enum CodingKeys: String, CodingKey {
-        case name, artists, popularity, album, albumId
+        case name, artists, popularity, album, albumId, isSaved, origin
         case availableMarkets = "available_markets"
         case discNumber = "disc_number"
         case durationMs = "duration_ms"
@@ -91,7 +91,6 @@ public class SPTTrack: SPTBaseObject, SPTTrackProtocol {
         isLocal = try container.decode(Bool.self, forKey: .isLocal)
         album = try container.decodeIfPresent(SPTAlbum.self, forKey: .album)
         popularity = try container.decodeIfPresent(Int.self, forKey: .popularity)
-        albumId = try container.decodeIfPresent(String.self, forKey: .albumId)
         
         try super.init(from: decoder)
     }
@@ -114,8 +113,6 @@ public class SPTTrack: SPTBaseObject, SPTTrackProtocol {
         try container.encodeIfPresent(album, forKey: .album)
         try container.encodeIfPresent(popularity, forKey: .popularity)
         
-        try container.encodeIfPresent(albumId, forKey: .albumId)
-        
         try super.encode(to: encoder)
     }
     
@@ -133,12 +130,6 @@ public class SPTTrack: SPTBaseObject, SPTTrackProtocol {
         public static let isLocal = Column(CodingKeys.isLocal)
         public static let album = Column(CodingKeys.album)
         public static let popularity = Column(CodingKeys.popularity)
-        public static let albumId = Column(CodingKeys.albumId)
-    }
-    
-    private static let albumAssociation = belongsTo(SPTAlbum.self)
-    public var linkedAlbum: QueryInterfaceRequest<SPTAlbum> {
-        request(for: Self.albumAssociation)
     }
     
     public override class var databaseTableName: String { "track" }
@@ -161,17 +152,6 @@ public class SPTTrack: SPTBaseObject, SPTTrackProtocol {
             
             table.column(CodingKeys.album.rawValue, .blob)
             table.column(CodingKeys.popularity.rawValue, .integer)
-            
-            table.column(CodingKeys.albumId.rawValue, .text)
-//                .indexed()
-//                .references(SPTAlbum.databaseTableName, onDelete: .cascade)
         }
     }
-    
-    public override class var migration: (identifier: String, migrate: (Database) throws -> Void) {
-        return ("createTracks", { db in
-            try db.create(table: databaseTableName, body: tableDefinitions)
-        })
-    }
-    
 }
